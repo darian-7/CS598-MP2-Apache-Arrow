@@ -1916,11 +1916,6 @@ arrify@^1.0.1:
   resolved "https://registry.npmjs.org/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha512-3CYzex9M9FGQjCGMGyi6/31c8GJbgb0qGyrx5HWxPd0aCwh4cB2YjMb2Xf9UuoogrMrlO9cTqnB5rI5GHZTcUA==
 
-asap@~2.0.6:
-  version "2.0.6"
-  resolved "https://registry.npmjs.org/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
-  integrity sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==
-
 assign-symbols@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
@@ -3752,15 +3747,14 @@ gulp-esbuild@0.11.1:
     plugin-error "^2.0.1"
     vinyl "^3.0.0"
 
-gulp-json-transform@0.4.8:
-  version "0.4.8"
-  resolved "https://registry.npmjs.org/gulp-json-transform/-/gulp-json-transform-0.4.8.tgz#fdbd19fd5327661ccdfc5977621f739ea86d557d"
-  integrity sha512-FBVn1HqNf0hqsgrspA7Xz2i/HxRZPKnccMapKPfIE+PANuCmtmgMD2OfRLbqRGBb0Xwl1pE76sSct5gyF1zsfw==
+gulp-json-transform@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/gulp-json-transform/-/gulp-json-transform-0.5.0.tgz#2f15abe808afcf8435036d1f6cc460f7695f0b3d"
+  integrity sha512-f54tk9T5dTGCNPBp1q80rMP3xScfDAJDprjyuc9nDLwIbB65xC4nerljGiRrCNjy7YjEfZpDowIqEAietkjtxg==
   dependencies:
     ansi-colors "^1.0.1"
     fancy-log "^1.3.2"
     plugin-error "^1.0.1"
-    promise "^8.0.1"
     through2 "^2.0.3"
     vinyl "^2.1.0"
 
@@ -5791,13 +5785,6 @@ process-nextick-args@^2.0.0, process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
-
-promise@^8.0.1:
-  version "8.3.0"
-  resolved "https://registry.npmjs.org/promise/-/promise-8.3.0.tgz#8cb333d1edeb61ef23869fbb8a4ea0279ab60e0a"
-  integrity sha512-rZPNPKTOYVNEEKFaq1HqTgOwZD+4/YHS5ukLzQCypkj+OkYx7iv0mA91lJlpPPZ8vMau3IIGj5Qlwrx+8iiSmg==
-  dependencies:
-    asap "~2.0.6"
 
 prompts@^2.0.1:
   version "2.4.2"
