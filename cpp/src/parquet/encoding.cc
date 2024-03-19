@@ -3153,6 +3153,17 @@ class ASCIIEncoder : public EncoderImpl, virtual public TypedEncoder<DType> {
 template <typename DType>
 void ASCIIEncoder<DType>::Put(const T* buffer, int num_values) {
   // TO BE IMPLEMENTED
+  for (int i = 0; i < num_values; ++i) {
+    // Convert the integer to a string (ASCII representation).
+    std::string str = std::to_string(buffer[i]);
+    
+    // Append the ASCII representation to the buffer.
+    PARQUET_THROW_NOT_OK(sink_.Append(reinterpret_cast<const uint8_t*>(str.c_str()), str.size()));
+    
+    // Add a null terminator after each number.
+    uint8_t terminator = '\0';
+    PARQUET_THROW_NOT_OK(sink_.Append(&terminator, 1));
+  }
 }
 
 // ----------------------------------------------------------------------
@@ -3197,6 +3208,39 @@ class ASCIIDecoder : public DecoderImpl, virtual public TypedDecoder<DType> {
 template <typename DType>
 int ASCIIDecoder<DType>::Decode(T* buffer, int max_values) {
   // TO BE IMPLEMENTED
+  int num_decoded = 0;
+  std::string current_number;
+  
+  for (int i = 0; i < max_values; ++i) {
+    current_number.clear();
+    uint8_t byte;
+    // Read bytes until the null terminator is found.
+    while (true) {
+      if (!this->source_->GetBuffer(1, &byte)) {
+        // End of buffer before reaching max_values; return the number of successfully decoded values.
+        return num_decoded;
+      }
+      
+      if (byte == '\0') {
+        break; // End of current number.
+      }
+      
+      current_number.push_back(static_cast<char>(byte));
+    }
+    
+    // Convert the ASCII representation back to an integer and store it in the output buffer.
+    try {
+      buffer[i] = static_cast<T>(std::stoll(current_number));
+    } catch (const std::invalid_argument& e) {
+      throw ParquetException("Invalid ASCII input for decoding to integer.");
+    } catch (const std::out_of_range& e) {
+      throw ParquetException("ASCII input out of integer range.");
+    }
+    
+    num_decoded++;
+  }
+  
+  return num_decoded;
 }
 
 // ----------------------------------------------------------------------
