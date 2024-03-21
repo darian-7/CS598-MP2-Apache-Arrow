@@ -52,8 +52,6 @@
 #include <iostream>
 #include <iomanip>
 
-#include <arrow/buffer.h> // For arrow::Buffer
-
 namespace bit_util = arrow::bit_util;
 
 using arrow::Status;
@@ -3113,7 +3111,9 @@ class RleBooleanDecoder : public DecoderImpl, virtual public BooleanDecoder {
 ///encoder integers of apache arrow table to ASCII
 
 // ----------------------------------------------------------------------
-// ASCIIEncoder
+// ASCII Encoder: Encodes integers in Apache Arrow table to ASCII
+// Added by CS598
+// ----------------------------------------------------------------------
 template <typename DType>
 class ASCIIEncoder : public EncoderImpl, virtual public TypedEncoder<DType> {
   public:
@@ -3171,14 +3171,10 @@ void ASCIIEncoder<DType>::Put(const T* buffer, int num_values) {
 }
 
 
-
-
-
-
-
 // ----------------------------------------------------------------------
-// ASCIIDecoder
-
+// ASCII Decoder: Decodes ASCII into integers
+// Added by CS598
+// ----------------------------------------------------------------------
 template <typename DType>
 class ASCIIDecoder : public DecoderImpl, virtual public TypedDecoder<DType> {
  public:
@@ -3253,8 +3249,6 @@ class ASCIIDecoder : public DecoderImpl, virtual public TypedDecoder<DType> {
                   int64_t valid_bits_offset,
                   typename EncodingTraits<DType>::DictAccumulator* builder) override { return 0; }
 };
-
-
 
 
 // ----------------------------------------------------------------------
@@ -3960,8 +3954,8 @@ std::unique_ptr<Encoder> MakeEncoder(Type::type type_num, Encoding::type encodin
         return std::make_unique<ASCIIEncoder<Int32Type>>(descr,pool);
       case Type::INT64:
         return std::make_unique<ASCIIEncoder<Int64Type>>(descr, pool);
-      // case Type::FLOAT:
-      //   return std::make_unique<ASCIIEncoder<FloatType>>(descr,pool);
+      case Type::FLOAT:
+        return std::make_unique<ASCIIEncoder<FloatType>>(descr,pool);
       default:
         throw ParquetException(
             "ASCII encoder only supports INT32 and INT64");
@@ -4044,8 +4038,8 @@ std::unique_ptr<Decoder> MakeDecoder(Type::type type_num, Encoding::type encodin
         return std::make_unique<ASCIIDecoder<Int32Type>>(descr);
       case Type::INT64:
         return std::make_unique<ASCIIDecoder<Int64Type>>(descr);
-      // case Type::FLOAT:
-      //   return std::make_unique<ASCIIDecoder<FloatType>>(descr);
+      case Type::FLOAT:
+        return std::make_unique<ASCIIDecoder<FloatType>>(descr);
       default:
         throw ParquetException(
             "ASCII decoder only supports INT32 and INT64");
