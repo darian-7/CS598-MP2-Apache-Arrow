@@ -3152,19 +3152,19 @@ void ASCIIEncoder<DType>::Put(const T* buffer, int num_values) {
   for (int i = 0; i < num_values; ++i) {
     std::string str;
     if constexpr (std::is_same<T, float>::value || std::is_same<T, double>::value) {
-      // Handle float/double types: round to two decimal places
+      // handliing float/double types: round to 2DP
       std::stringstream stream;
       stream << std::fixed << std::setprecision(2) << buffer[i];
       str = stream.str();
     } else {
-      // Handle integer types
+      // handling integer types
       str = std::to_string(buffer[i]);
     }
     
-    // Append the ASCII representation to the buffer
+    // append ASCII to buffer
     PARQUET_THROW_NOT_OK(sink_.Append(reinterpret_cast<const uint8_t*>(str.c_str()), str.size()));
     
-    // Add a null terminator after each number
+    // adding a null terminator after each number
     uint8_t terminator = '\0';
     PARQUET_THROW_NOT_OK(sink_.Append(&terminator, 1));
   }
@@ -3182,22 +3182,22 @@ class ASCIIDecoder : public DecoderImpl, virtual public TypedDecoder<DType> {
 
   explicit ASCIIDecoder(const ColumnDescriptor* descr)
       : DecoderImpl(descr, Encoding::ASCII) {
-    // Update exception message to include FLOAT type support
+    // update exception message to include FLOAT type support
     if (DType::type_num != Type::INT32 && DType::type_num != Type::INT64 && DType::type_num != Type::FLOAT) {
       throw ParquetException("ASCII decoding should be for integer or float data.");
     }
   }
 
-  // Declaration for data_source_ and current_data_pos_
+  // declaration for data_source_ and current_data_pos_
  protected:
   std::shared_ptr<::arrow::Buffer> data_source_;
   int64_t current_data_pos_ = 0;
 
  public:
-  // Method to set the data source
+  // setting data source
   void SetDataSource(const std::shared_ptr<::arrow::Buffer>& buffer) {
     data_source_ = buffer;
-    current_data_pos_ = 0; // Reset the position each time a new data source is set
+    current_data_pos_ = 0; // reset  position each time a new data source is set
   }
 
   int Decode(T* buffer, int max_values) override {
@@ -3215,7 +3215,7 @@ class ASCIIDecoder : public DecoderImpl, virtual public TypedDecoder<DType> {
         uint8_t byte = data_source_->data()[current_data_pos_++];
 
         if (byte == '\0') {
-          break; // End of current number
+          break; // end of current number
         }
 
         current_number.push_back(static_cast<char>(byte));
@@ -3223,10 +3223,10 @@ class ASCIIDecoder : public DecoderImpl, virtual public TypedDecoder<DType> {
 
       try {
         if constexpr (std::is_same<T, float>::value || std::is_same<T, double>::value) {
-          // Decode as float/double
+          // decode as float
           buffer[i] = static_cast<T>(std::stod(current_number));
         } else {
-          // Decode as integer
+          // decode as int
           buffer[i] = static_cast<T>(std::stoll(current_number));
         }
         num_decoded++;
